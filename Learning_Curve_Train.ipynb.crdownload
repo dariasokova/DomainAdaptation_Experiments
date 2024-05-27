@@ -1,0 +1,320 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "c5b0ed13-357d-4335-9dd3-2324e78107d4",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\u001b[33mWARNING: Ignoring invalid distribution -orchvision (/opt/conda/lib/python3.8/site-packages)\u001b[0m\u001b[33m\n",
+      "\u001b[0mLooking in indexes: https://pypi.org/simple, https://pypi.ngc.nvidia.com\n",
+      "Requirement already satisfied: OpenNMT-py in /opt/conda/lib/python3.8/site-packages (3.0.1)\n",
+      "Requirement already satisfied: torch>=1.12.1 in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (1.13.1)\n",
+      "Requirement already satisfied: configargparse in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (1.7)\n",
+      "Requirement already satisfied: ctranslate2<4,>=3.0 in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (3.24.0)\n",
+      "Requirement already satisfied: tensorboard>=2.3 in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (2.12.3)\n",
+      "Requirement already satisfied: flask in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (2.0.2)\n",
+      "Requirement already satisfied: waitress in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (3.0.0)\n",
+      "Requirement already satisfied: pyonmttok<2,>=1.34 in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (1.37.1)\n",
+      "Requirement already satisfied: pyyaml in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (6.0)\n",
+      "Requirement already satisfied: sacrebleu in /opt/conda/lib/python3.8/site-packages (from OpenNMT-py) (2.4.1)\n",
+      "Requirement already satisfied: setuptools in /opt/conda/lib/python3.8/site-packages (from ctranslate2<4,>=3.0->OpenNMT-py) (69.5.1)\n",
+      "Requirement already satisfied: numpy in /opt/conda/lib/python3.8/site-packages (from ctranslate2<4,>=3.0->OpenNMT-py) (1.23.5)\n",
+      "Requirement already satisfied: absl-py>=0.4 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (2.1.0)\n",
+      "Requirement already satisfied: grpcio>=1.48.2 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (1.62.2)\n",
+      "Requirement already satisfied: google-auth<3,>=1.6.3 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (2.29.0)\n",
+      "Requirement already satisfied: google-auth-oauthlib<1.1,>=0.5 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (1.0.0)\n",
+      "Requirement already satisfied: markdown>=2.6.8 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (3.3.6)\n",
+      "Requirement already satisfied: protobuf>=3.19.6 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (4.25.3)\n",
+      "Requirement already satisfied: requests<3,>=2.21.0 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (2.26.0)\n",
+      "Requirement already satisfied: tensorboard-data-server<0.8.0,>=0.7.0 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (0.7.2)\n",
+      "Requirement already satisfied: werkzeug>=1.0.1 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (2.0.2)\n",
+      "Requirement already satisfied: wheel>=0.26 in /opt/conda/lib/python3.8/site-packages (from tensorboard>=2.3->OpenNMT-py) (0.43.0)\n",
+      "Requirement already satisfied: typing-extensions in /opt/conda/lib/python3.8/site-packages (from torch>=1.12.1->OpenNMT-py) (3.7.4.3)\n",
+      "Requirement already satisfied: nvidia-cuda-runtime-cu11==11.7.99 in /opt/conda/lib/python3.8/site-packages (from torch>=1.12.1->OpenNMT-py) (11.7.99)\n",
+      "Requirement already satisfied: nvidia-cudnn-cu11==8.5.0.96 in /opt/conda/lib/python3.8/site-packages (from torch>=1.12.1->OpenNMT-py) (8.5.0.96)\n",
+      "Requirement already satisfied: nvidia-cublas-cu11==11.10.3.66 in /opt/conda/lib/python3.8/site-packages (from torch>=1.12.1->OpenNMT-py) (11.10.3.66)\n",
+      "Requirement already satisfied: nvidia-cuda-nvrtc-cu11==11.7.99 in /opt/conda/lib/python3.8/site-packages (from torch>=1.12.1->OpenNMT-py) (11.7.99)\n",
+      "Requirement already satisfied: Jinja2>=3.0 in /opt/conda/lib/python3.8/site-packages (from flask->OpenNMT-py) (3.0.3)\n",
+      "Requirement already satisfied: itsdangerous>=2.0 in /opt/conda/lib/python3.8/site-packages (from flask->OpenNMT-py) (2.0.1)\n",
+      "Requirement already satisfied: click>=7.1.2 in /opt/conda/lib/python3.8/site-packages (from flask->OpenNMT-py) (8.0.3)\n",
+      "Requirement already satisfied: portalocker in /opt/conda/lib/python3.8/site-packages (from sacrebleu->OpenNMT-py) (2.8.2)\n",
+      "Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (from sacrebleu->OpenNMT-py) (2022.1.18)\n",
+      "Requirement already satisfied: tabulate>=0.8.9 in /opt/conda/lib/python3.8/site-packages (from sacrebleu->OpenNMT-py) (0.8.9)\n",
+      "Requirement already satisfied: colorama in /opt/conda/lib/python3.8/site-packages (from sacrebleu->OpenNMT-py) (0.4.4)\n",
+      "Requirement already satisfied: lxml in /opt/conda/lib/python3.8/site-packages (from sacrebleu->OpenNMT-py) (5.1.0)\n",
+      "Requirement already satisfied: cachetools<6.0,>=2.0.0 in /opt/conda/lib/python3.8/site-packages (from google-auth<3,>=1.6.3->tensorboard>=2.3->OpenNMT-py) (4.2.4)\n",
+      "Requirement already satisfied: pyasn1-modules>=0.2.1 in /opt/conda/lib/python3.8/site-packages (from google-auth<3,>=1.6.3->tensorboard>=2.3->OpenNMT-py) (0.2.8)\n",
+      "Requirement already satisfied: rsa<5,>=3.1.4 in /opt/conda/lib/python3.8/site-packages (from google-auth<3,>=1.6.3->tensorboard>=2.3->OpenNMT-py) (4.8)\n",
+      "Requirement already satisfied: requests-oauthlib>=0.7.0 in /opt/conda/lib/python3.8/site-packages (from google-auth-oauthlib<1.1,>=0.5->tensorboard>=2.3->OpenNMT-py) (1.3.0)\n",
+      "Requirement already satisfied: MarkupSafe>=2.0 in /opt/conda/lib/python3.8/site-packages (from Jinja2>=3.0->flask->OpenNMT-py) (2.0.1)\n",
+      "Requirement already satisfied: importlib-metadata>=4.4 in /opt/conda/lib/python3.8/site-packages (from markdown>=2.6.8->tensorboard>=2.3->OpenNMT-py) (4.10.1)\n",
+      "Requirement already satisfied: urllib3<1.27,>=1.21.1 in /opt/conda/lib/python3.8/site-packages (from requests<3,>=2.21.0->tensorboard>=2.3->OpenNMT-py) (1.26.7)\n",
+      "Requirement already satisfied: certifi>=2017.4.17 in /opt/conda/lib/python3.8/site-packages (from requests<3,>=2.21.0->tensorboard>=2.3->OpenNMT-py) (2023.11.17)\n",
+      "Requirement already satisfied: charset-normalizer~=2.0.0 in /opt/conda/lib/python3.8/site-packages (from requests<3,>=2.21.0->tensorboard>=2.3->OpenNMT-py) (2.0.9)\n",
+      "Requirement already satisfied: idna<4,>=2.5 in /opt/conda/lib/python3.8/site-packages (from requests<3,>=2.21.0->tensorboard>=2.3->OpenNMT-py) (3.1)\n",
+      "Requirement already satisfied: zipp>=0.5 in /opt/conda/lib/python3.8/site-packages (from importlib-metadata>=4.4->markdown>=2.6.8->tensorboard>=2.3->OpenNMT-py) (3.7.0)\n",
+      "Requirement already satisfied: pyasn1<0.5.0,>=0.4.6 in /opt/conda/lib/python3.8/site-packages (from pyasn1-modules>=0.2.1->google-auth<3,>=1.6.3->tensorboard>=2.3->OpenNMT-py) (0.4.8)\n",
+      "Requirement already satisfied: oauthlib>=3.0.0 in /opt/conda/lib/python3.8/site-packages (from requests-oauthlib>=0.7.0->google-auth-oauthlib<1.1,>=0.5->tensorboard>=2.3->OpenNMT-py) (3.1.1)\n",
+      "\u001b[33mWARNING: Error parsing requirements for torchvision: [Errno 2] No such file or directory: '/opt/conda/lib/python3.8/site-packages/torchvision-0.17.1+cu121.dist-info/METADATA'\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33mWARNING: Ignoring invalid distribution -orchvision (/opt/conda/lib/python3.8/site-packages)\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33mDEPRECATION: torch-tensorrt 1.1.0a0 has a non-standard dependency specifier torch>=1.10.0+cu113<1.11.0. pip 24.1 will enforce this behaviour change. A possible replacement is to upgrade to a newer version of torch-tensorrt or contact the author to suggest that they release a version with a conforming dependency specifiers. Discussion can be found at https://github.com/pypa/pip/issues/12063\u001b[0m\u001b[33m\n",
+      "\u001b[0m"
+     ]
+    }
+   ],
+   "source": [
+    "!pip3 install OpenNMT-py"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "fc76010f-b045-450c-a847-350230bc1e4a",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2024-05-24 07:57:10.947488: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.\n",
+      "To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.\n",
+      "Corpus corpus_1's weight should be given. We default it to 1 for you.\n",
+      "[2024-05-24 07:57:15,331 INFO] Counter vocab from -1 samples.\n",
+      "[2024-05-24 07:57:15,331 INFO] n_sample=-1: Build vocab on full datasets.\n",
+      "[2024-05-24 07:57:25,004 INFO] * Transform statistics for corpus_1(50.00%):\n",
+      "\t\t\t* FilterTooLongStats(filtered=606)\n",
+      "\n",
+      "[2024-05-24 07:57:25,087 INFO] * Transform statistics for corpus_1(50.00%):\n",
+      "\t\t\t* FilterTooLongStats(filtered=583)\n",
+      "\n",
+      "[2024-05-24 07:57:25,251 INFO] Counters src:49930\n",
+      "[2024-05-24 07:57:25,251 INFO] Counters tgt:50110\n"
+     ]
+    }
+   ],
+   "source": [
+    "!onmt_build_vocab -config config_lc_train3.yaml -n_sample -1 -num_threads 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "6bb8106c-8714-467d-a782-ca1ba531987f",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "KeyboardInterrupt\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "!nohup onmt_train -config config_lc_train2.yaml"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "abe823b4-3ca2-4c0b-b478-79ae648e6b49",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Cloning into 'DataLitMT'...\n",
+      "remote: Enumerating objects: 1749, done.\u001b[K\n",
+      "remote: Counting objects: 100% (437/437), done.\u001b[K\n",
+      "remote: Compressing objects: 100% (167/167), done.\u001b[K\n",
+      "remote: Total 1749 (delta 253), reused 416 (delta 244), pack-reused 1312\u001b[K\n",
+      "Receiving objects: 100% (1749/1749), 57.16 MiB | 19.83 MiB/s, done.\n",
+      "Resolving deltas: 100% (957/957), done.\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Connect to the DataLitMT GitHub\n",
+    "!git clone https://github.com/ITMK/DataLitMT.git"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "fc07c636-b864-4a8d-9a97-ae6363d0fe3b",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\u001b[33mWARNING: Ignoring invalid distribution -orchvision (/opt/conda/lib/python3.8/site-packages)\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33mWARNING: Error parsing requirements for torchvision: [Errno 2] No such file or directory: '/opt/conda/lib/python3.8/site-packages/torchvision-0.17.1+cu121.dist-info/METADATA'\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33mWARNING: Ignoring invalid distribution -orchvision (/opt/conda/lib/python3.8/site-packages)\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33mDEPRECATION: torch-tensorrt 1.1.0a0 has a non-standard dependency specifier torch>=1.10.0+cu113<1.11.0. pip 24.1 will enforce this behaviour change. A possible replacement is to upgrade to a newer version of torch-tensorrt or contact the author to suggest that they release a version with a conforming dependency specifiers. Discussion can be found at https://github.com/pypa/pip/issues/12063\u001b[0m\u001b[33m\n",
+      "\u001b[0m"
+     ]
+    }
+   ],
+   "source": [
+    "# If needed install/update SentencePiece\n",
+    "!pip3 install --upgrade -q sentencepiece"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "5ccf7d37-86e9-4667-b244-9a88d5663685",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Done desubwording! Output: translation_LC_train4.desubword\n"
+     ]
+    }
+   ],
+   "source": [
+    "!python3 DataLitMT/learning_resources/data_planning_and_collection/desubword.py env_ru_subword.model translation_LC_train4"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "9b381345-fddd-447d-9eef-f7f9e277b2e3",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Несомненно, об этой практике не упоминается или о каких-либо требованиях в отношении добровольной связи в рамках самых последних правил о практике в Великобритании.\n",
+      "Этот декрет был включен в Федеральный закон о труде, подписанный федеральным и провинциальными правительствами в 1998 году; однако он так и не был введен в действие.\n",
+      "Г-н Грут (Швеция), представляя пункт повестки дня, говорит, что Международный институт по вопросам демократии и помощи в проведении выборов (Международная ИДЕ) насчитывает 19 государств-членов, представляющих все районы мира.\n",
+      "Japón y la Argentinaia — Historia de suces Relaciones (Япония и Аргентина — история их отношений) (Буэнос-Айрес, Editorial Suamericana, 1997).\n",
+      "Эта программа состоит из трех этапов:\n",
+      "Ключевые слова: сертификация лесов, Румыния, рыночные подходы, лесное хозяйство и устойчивое лесопользование\n",
+      "Министерство сельского и лесного хозяйства, Бавария\n",
+      "Всемирная организация здравоохранения\n",
+      "Горячие точки, экологические сети и коридоры\n",
+      "Он отмечает, что попечителей назначаются и могут быть изъяты министром и что их функция состоит в управлении земельными ресурсами в интересах общества (общин).\n"
+     ]
+    }
+   ],
+   "source": [
+    "!head -n 10 translation_LC_train4.desubword"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "c02f50a6-e161-4481-a4f4-c963fb577835",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\u001b[33mWARNING: Ignoring invalid distribution -orchvision (/opt/conda/lib/python3.8/site-packages)\u001b[0m\u001b[33m\n",
+      "\u001b[0mLooking in indexes: https://pypi.org/simple, https://pypi.ngc.nvidia.com\n",
+      "Requirement already satisfied: sacrebleu in /opt/conda/lib/python3.8/site-packages (2.4.1)\n",
+      "Requirement already satisfied: portalocker in /opt/conda/lib/python3.8/site-packages (from sacrebleu) (2.8.2)\n",
+      "Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (from sacrebleu) (2022.1.18)\n",
+      "Requirement already satisfied: tabulate>=0.8.9 in /opt/conda/lib/python3.8/site-packages (from sacrebleu) (0.8.9)\n",
+      "Requirement already satisfied: numpy>=1.17 in /opt/conda/lib/python3.8/site-packages (from sacrebleu) (1.23.5)\n",
+      "Requirement already satisfied: colorama in /opt/conda/lib/python3.8/site-packages (from sacrebleu) (0.4.4)\n",
+      "Requirement already satisfied: lxml in /opt/conda/lib/python3.8/site-packages (from sacrebleu) (5.1.0)\n",
+      "\u001b[33mWARNING: Error parsing requirements for torchvision: [Errno 2] No such file or directory: '/opt/conda/lib/python3.8/site-packages/torchvision-0.17.1+cu121.dist-info/METADATA'\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33mWARNING: Ignoring invalid distribution -orchvision (/opt/conda/lib/python3.8/site-packages)\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33mDEPRECATION: torch-tensorrt 1.1.0a0 has a non-standard dependency specifier torch>=1.10.0+cu113<1.11.0. pip 24.1 will enforce this behaviour change. A possible replacement is to upgrade to a newer version of torch-tensorrt or contact the author to suggest that they release a version with a conforming dependency specifiers. Discussion can be found at https://github.com/pypa/pip/issues/12063\u001b[0m\u001b[33m\n",
+      "\u001b[0m"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install sacrebleu\n",
+    "import sacrebleu\n",
+    "from sacrebleu.metrics import BLEU"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "580bf4ea-ceb2-4e5c-9389-0ded5d33effc",
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "34.03\n",
+      "\u001b[0m"
+     ]
+    }
+   ],
+   "source": [
+    "!sacrebleu  file2_top2.txt.test.ru -i translation_LC_train4.desubword -m bleu --score-only --width 2"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "myenv",
+   "language": "python",
+   "name": "myenv"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.12"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
